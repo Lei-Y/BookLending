@@ -154,8 +154,31 @@ These tests cover the wiring that unit tests cannot:
 - Query-string binding for `search`, `availability`, `page`, `pageSize`.
 - Round-trip behaviour: create then fetch by id, toggle then re-read.
 
-### Frontend
+### Frontend — Vitest + React Testing Library
 
-The React layer has no automated tests yet. Highest-value additions would
-be a Vitest + React Testing Library suite for `LibraryPage` covering filter
-resets, pagination boundaries, and the delete-last-on-page bounce.
+```
+cd web
+npm test          # watch mode
+npm run test:run  # single run
+npm run coverage  # single run + coverage report under web/coverage/
+```
+
+Twenty tests across five files cover:
+
+- `Pagination` — boundary disabled states, click → `onChange(nextPage)`,
+  hides itself when there is only one page.
+- `BookRow` — labels, badge state, button copy flips between
+  *Borrow*/*Return*, click handlers receive the book id.
+- `BookSearch` — keystrokes propagate through `onSearchChange`;
+  availability dropdown propagates through `onAvailabilityChange`.
+- `AddBookModal` — closed-state renders nothing, validation blocks blank
+  submits, trimmed values reach `onSubmit`, the submit button is disabled
+  while submitting.
+- `LibraryPage` — uses `vi.mock` to stub `booksApi` and drives the
+  component end-to-end: list rendering, search filtering, toggle update,
+  modal create + display, and the *delete-last-on-page → bounce back*
+  behaviour that is easy to regress.
+
+`api/booksApi.ts` is intentionally excluded from these unit tests because
+it is a thin `fetch` wrapper; the .NET integration tests already pin the
+HTTP contract from the server side.
