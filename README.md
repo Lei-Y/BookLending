@@ -23,7 +23,38 @@ web/                                 Vite + React + TypeScript frontend
 **Dependency direction:** `Api → Service → Domain` and `Infrastructure → Domain`.
 Domain has zero outward references; Service knows nothing about HTTP or storage.
 
-## Running
+## Quick start with Docker
+
+The fastest way to try the app. No local .NET or Node install required —
+just Docker.
+
+```
+docker compose up --build
+```
+
+Then open:
+
+- Web UI: <http://localhost:5173>
+- API: <http://localhost:5110>
+- Scalar API explorer: <http://localhost:5110/scalar/v1>
+
+Stop everything with `Ctrl+C`, then `docker compose down` to remove the
+containers.
+
+The compose file builds two images:
+
+- `booklending-api` — multi-stage `dotnet/sdk` → `dotnet/aspnet` runtime,
+  runs as a non-root user, listens on port 8080 inside the container
+  (mapped to host `5110`).
+- `booklending-web` — multi-stage `node` build → `nginx:alpine` serving the
+  Vite production bundle on port 80 (mapped to host `5173`).
+
+Dockerfiles live next to the projects they build
+(`src/BookLending.Api/Dockerfile`, `web/Dockerfile`) and both use a
+csproj-first / `package.json`-first layer ordering so dependency restore is
+cached across source-only changes.
+
+## Running locally (without Docker)
 
 ### Backend
 ```

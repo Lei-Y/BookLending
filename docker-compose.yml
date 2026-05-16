@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/BookLending.Api/Dockerfile
+    image: booklending-api:latest
+    container_name: booklending-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5110:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        # The API is reached from the user's browser, not from inside the
+        # web container, so the host-side URL is what we bake into the
+        # static build.
+        VITE_API_BASE_URL: http://localhost:5110
+    image: booklending-web:latest
+    container_name: booklending-web
+    depends_on:
+      - api
+    ports:
+      - "5173:80"

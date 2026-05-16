@@ -1,0 +1,38 @@
+# Keep the build context small and reproducible. Anything not needed
+# for `dotnet restore`/`publish` or `npm ci`/`build` is excluded.
+
+# .NET artifacts
+**/bin/
+**/obj/
+**/out/
+**/publish/
+**/TestResults/
+**/coverage/
+**/*.user
+
+# Tests (not needed inside the runtime image)
+tests/
+
+# Node
+**/node_modules/
+**/dist/
+**/.vite/
+**/.cache/
+
+# VCS / IDE / local tooling
+.git/
+.github/
+.vs/
+.vscode/
+.idea/
+.claude/
+
+# OS / editor noise
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+
+# Docs and ops files don't belong in the image
+README.md
+docker-compose.yml
+**/Dockerfile
