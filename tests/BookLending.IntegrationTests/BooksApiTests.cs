@@ -130,6 +130,14 @@ public class BooksApiTests : IClassFixture<IsolatedFactory>
     }
 
     [Fact]
+    public async Task Delete_NonExistent_Returns404()
+    {
+        var response = await _client.DeleteAsync($"/api/books/{Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task Query_FiltersBySearchAndAvailability()
     {
         var a = await CreateAsync("Domain-Driven Design", "Eric Evans");
