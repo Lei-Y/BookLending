@@ -78,6 +78,26 @@ Vite dev server at `http://localhost:5173`. Override the API target with
 dotnet test
 ```
 
+### Run everything CI runs, locally
+
+`verify.ps1` mirrors the GitHub Actions pipeline — restore, format check,
+build, .NET tests, web format/lint/test/build — and exits non-zero on the
+first failure. Run it before pushing to avoid a CI round-trip:
+
+```
+./verify.ps1          # check only (read-only)
+./verify.ps1 -Fix     # auto-fix Prettier + dotnet format first, then check
+```
+
+### Why no pre-commit hook?
+
+A `husky` + `lint-staged` pre-commit hook would be the obvious next step,
+and for a multi-developer codebase I would install one.
+
+If this codebase grew past a handful of contributors I would add husky
+with `lint-staged` to run `prettier --write`, `eslint --fix`, and
+`dotnet format --include` against the staged files.
+
 ## API
 
 | Verb   | Route                              | Purpose                          |
