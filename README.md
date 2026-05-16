@@ -1,5 +1,8 @@
 # BookLending — 1Breadcrumb Library Prototype
 
+[![CI](https://github.com/Lei-Y/BookLending/actions/workflows/ci.yml/badge.svg)](https://github.com/Lei-Y/BookLending/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Lei-Y/BookLending/graph/badge.svg?token=MZWDHRL8R6)](https://codecov.io/gh/Lei-Y/BookLending)
+
 Crumb-to-Crumb book lending library prototype. Discovery-focused: who owns
 which books and whether they are available to borrow.
 
