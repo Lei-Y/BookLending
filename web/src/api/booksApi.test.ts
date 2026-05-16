@@ -57,10 +57,7 @@ describe("booksApi", () => {
 
   it("posts JSON to create a book", async () => {
     fetchMock.mockResolvedValueOnce(
-      jsonResponse(
-        { id: "1", title: "X", owner: "Y", available: true },
-        { status: 201 }
-      )
+      jsonResponse({ id: "1", title: "X", owner: "Y", available: true }, { status: 201 })
     );
 
     const book = await createBook("X", "Y");

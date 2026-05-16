@@ -14,9 +14,7 @@ describe("AddBookModal", () => {
   it("shows a validation error when fields are blank", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(
-      <AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />
-    );
+    render(<AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />);
 
     await user.click(screen.getByRole("button", { name: /^add$/i }));
 
@@ -27,9 +25,7 @@ describe("AddBookModal", () => {
   it("calls onSubmit with trimmed values", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(
-      <AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />
-    );
+    render(<AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />);
 
     const [titleInput, ownerInput] = screen.getAllByRole("textbox");
     await user.type(titleInput, "  Domain-Driven Design  ");
@@ -42,9 +38,7 @@ describe("AddBookModal", () => {
   it("surfaces an error message when onSubmit throws", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn().mockRejectedValue(new Error("Network down"));
-    render(
-      <AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />
-    );
+    render(<AddBookModal open submitting={false} onClose={() => {}} onSubmit={onSubmit} />);
 
     const [titleInput, ownerInput] = screen.getAllByRole("textbox");
     await user.type(titleInput, "X");
@@ -55,9 +49,7 @@ describe("AddBookModal", () => {
   });
 
   it("disables Add while submitting", () => {
-    render(
-      <AddBookModal open submitting={true} onClose={() => {}} onSubmit={() => {}} />
-    );
+    render(<AddBookModal open submitting={true} onClose={() => {}} onSubmit={() => {}} />);
     expect(screen.getByRole("button", { name: /adding/i })).toBeDisabled();
   });
 });

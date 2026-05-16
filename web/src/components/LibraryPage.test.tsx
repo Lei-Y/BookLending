@@ -51,9 +51,7 @@ let store: Store;
 beforeEach(() => {
   store = { books: [] };
 
-  vi.mocked(api.fetchBooks).mockImplementation(async (params) =>
-    buildPage(store, params)
-  );
+  vi.mocked(api.fetchBooks).mockImplementation(async (params) => buildPage(store, params));
   vi.mocked(api.createBook).mockImplementation(async (title, owner) => {
     const book: Book = { id: crypto.randomUUID(), title, owner, available: true };
     store.books.push(book);
