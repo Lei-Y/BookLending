@@ -1,0 +1,107 @@
+# ---------- .NET ----------
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Pp]ublish/
+PublishProfiles/
+publish/
+
+# Build results / artifacts
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.userprefs
+*.pidb
+*.svclog
+*.scc
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# Roslyn
+*.dotCover
+*.cache
+*.tmp
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sln.iml
+
+# Rider
+*.DotSettings.user
+
+# JetBrains
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/shelf
+
+# ---------- Node / React / Vite ----------
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Build output
+build/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Editor
+*.swp
+.DS_Store
+Thumbs.db
