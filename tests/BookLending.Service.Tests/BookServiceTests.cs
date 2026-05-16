@@ -115,6 +115,35 @@ public class BookServiceTests
     }
 
     [Fact]
+    public void PagedResult_TotalPages_IsZeroWhenPageSizeIsZero()
+    {
+        // Guards against divide-by-zero in the defensive branch of
+        // PagedResult.TotalPages. BookService clamps PageSize >= 1 before
+        // building the result, so this branch is unreachable through the
+        // service but is still part of the Domain contract.
+        var result = new PagedResult<Book> { TotalCount = 42, PageSize = 0 };
+
+        Assert.Equal(0, result.TotalPages);
+    }
+
+    [Fact]
+    public void Seeder_PopulatesEmptyRepository()
+    {
+        var repo = new InMemoryBookRepository();
+
+        BookSeeder.Seed(repo);
+
+        var all = repo.GetAll().ToList();
+        Assert.NotEmpty(all);
+        Assert.All(all, b =>
+        {
+            Assert.NotEqual(Guid.Empty, b.Id);
+            Assert.False(string.IsNullOrWhiteSpace(b.Title));
+            Assert.False(string.IsNullOrWhiteSpace(b.Owner));
+        });
+    }
+
+    [Fact]
     public void Query_PaginatesAndOrdersByTitle()
     {
         var svc = NewService();
