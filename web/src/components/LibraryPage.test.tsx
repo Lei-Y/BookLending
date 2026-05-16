@@ -174,6 +174,20 @@ describe("LibraryPage", () => {
     expect(await screen.findByText(/toggle broke/i)).toBeInTheDocument();
   });
 
+  it("does not delete when the user cancels the confirm dialog", async () => {
+    const user = userEvent.setup();
+    store.books = [{ id: "1", title: "Refactoring", owner: "x", available: true }];
+    vi.spyOn(window, "confirm").mockReturnValueOnce(false);
+
+    render(<LibraryPage />);
+    await screen.findByText("Refactoring");
+
+    await user.click(screen.getByRole("button", { name: /delete/i }));
+
+    expect(api.deleteBook).not.toHaveBeenCalled();
+    expect(screen.getByText("Refactoring")).toBeInTheDocument();
+  });
+
   it("shows an error when deleteBook rejects", async () => {
     const user = userEvent.setup();
     store.books = [{ id: "1", title: "Refactoring", owner: "x", available: true }];
