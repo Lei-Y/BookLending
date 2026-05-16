@@ -56,6 +56,22 @@ dotnet test
 | PATCH  | `/api/books/{id}/toggle`            | Toggle availability (borrow/return) |
 | DELETE | `/api/books/{id}`                   | Remove                           |
 
+### Interactive API explorer (Scalar)
+
+The Development environment exposes an interactive OpenAPI explorer powered by
+[Scalar](https://github.com/scalar/scalar):
+
+- Scalar UI: <http://localhost:5110/scalar/v1>
+- Raw OpenAPI document: <http://localhost:5110/openapi/v1.json>
+
+The OpenAPI document itself is produced by ASP.NET Core's built-in
+`AddOpenApi()` (no Swashbuckle dependency). Scalar reads that document and
+renders the UI; the two layers are independent and either can be swapped
+without touching the controllers.
+
+Both endpoints are only mapped when `ASPNETCORE_ENVIRONMENT=Development` to
+avoid exposing the schema in production.
+
 ## Design Notes
 
 - **Auth is intentionally out of scope** for this prototype. Owner is a free-form
