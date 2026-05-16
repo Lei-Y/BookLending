@@ -84,6 +84,37 @@ public class BookServiceTests
     }
 
     [Fact]
+    public void Delete_RemovesExistingBook()
+    {
+        var svc = NewService();
+        var book = svc.Create("Throwaway", "Owner");
+
+        var removed = svc.Delete(book.Id);
+
+        Assert.True(removed);
+        Assert.Null(svc.GetById(book.Id));
+    }
+
+    [Fact]
+    public void Delete_ReturnsFalseWhenMissing()
+    {
+        var svc = NewService();
+        Assert.False(svc.Delete(Guid.NewGuid()));
+    }
+
+    [Fact]
+    public void Update_ReturnsFalseWhenBookMissing()
+    {
+        // Exercises the repository's Update failure branch directly,
+        // which BookService never hits because ToggleAvailability guards
+        // against missing IDs before calling Update.
+        var repo = new InMemoryBookRepository();
+        var ghost = new Book { Id = Guid.NewGuid(), Title = "Ghost", Owner = "Nobody" };
+
+        Assert.False(repo.Update(ghost));
+    }
+
+    [Fact]
     public void Query_PaginatesAndOrdersByTitle()
     {
         var svc = NewService();
