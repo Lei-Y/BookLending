@@ -6,6 +6,7 @@
     <Project Path="src/BookLending.Service/BookLending.Service.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/BookLending.IntegrationTests/BookLending.IntegrationTests.csproj" />
     <Project Path="tests/BookLending.Service.Tests/BookLending.Service.Tests.csproj" />
   </Folder>
 </Solution>

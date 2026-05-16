@@ -16,7 +16,8 @@ src/
   BookLending.Infrastructure/        Concrete persistence (in-memory) + seed data
   BookLending.Api/                   ASP.NET Core Web API host, controllers, DI
 tests/
-  BookLending.Service.Tests/         xUnit tests for the service layer
+  BookLending.Service.Tests/         xUnit unit tests for the service layer
+  BookLending.IntegrationTests/      xUnit integration tests over the HTTP pipeline
 web/                                 Vite + React + TypeScript frontend
 ```
 
@@ -119,15 +120,42 @@ avoid exposing the schema in production.
 
 ## Testing Strategy
 
-`BookLending.Service.Tests` covers the parts of `BookService` worth pinning
-down: input validation on create, search casing, availability filter,
-toggle behaviour, and pagination + ordering. The controller is a thin
-pass-through and the repository is trivial, so neither was unit-tested for
-this prototype. With more time I would add a `WebApplicationFactory`-based
-integration test that exercises the HTTP surface and CORS configuration end
-to end.
+Tests are split into two projects so the fast feedback loop is not slowed
+down by host startup.
 
-The React layer has no automated tests in this iteration. Highest-value
-additions would be a React Testing Library suite for `LibraryPage`
-covering filter resets, pagination boundaries, and the delete-last-on-page
-bounce.
+### Unit tests — `BookLending.Service.Tests`
+
+Exercise `BookService` in isolation against a fresh in-memory repository:
+
+- Input validation on `Create` (blank title / owner).
+- `Toggle` happy path and missing-id path.
+- `Delete` happy path and missing-id path.
+- `Query` filtering by search (case-insensitive), filtering by availability,
+  and pagination + ordering.
+- A defensive branch in `PagedResult.TotalPages` that the service itself
+  never reaches but that is still part of the Domain contract.
+- `BookSeeder` populates the repository with valid books.
+
+### Integration tests — `BookLending.IntegrationTests`
+
+Built on `Microsoft.AspNetCore.Mvc.Testing`. `IsolatedFactory` spins up the
+real ASP.NET host in-process, switches it into the `Testing` environment
+(so `Program.cs` skips the seed), and replaces the singleton repository
+with an empty one. The factory exposes a `ResetState()` hook that the test
+class constructor calls before every `[Fact]`, so each test runs against a
+clean repository while the host is built only once per class.
+
+These tests cover the wiring that unit tests cannot:
+
+- Status codes (`201 Created` with `Location` header, `204 No Content`,
+  `404 Not Found`, `400 Bad Request`).
+- JSON serialisation uses camelCase property names — the contract the
+  React client relies on.
+- Query-string binding for `search`, `availability`, `page`, `pageSize`.
+- Round-trip behaviour: create then fetch by id, toggle then re-read.
+
+### Frontend
+
+The React layer has no automated tests yet. Highest-value additions would
+be a Vitest + React Testing Library suite for `LibraryPage` covering filter
+resets, pagination boundaries, and the delete-last-on-page bounce.

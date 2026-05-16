@@ -33,8 +33,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-using (var scope = app.Services.CreateScope())
+// Integration tests run with ASPNETCORE_ENVIRONMENT=Testing and rely on a
+// clean, empty repository — skip seeding in that environment so tests can
+// assert on exact state.
+if (!app.Environment.IsEnvironment("Testing"))
 {
+    using var scope = app.Services.CreateScope();
     var repo = scope.ServiceProvider.GetRequiredService<IBookRepository>();
     if (!repo.GetAll().Any())
     {
